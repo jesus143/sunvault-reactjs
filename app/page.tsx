@@ -80,8 +80,8 @@ export default function SolarLandingPage() {
           <div className="flex flex-col items-center">
             <Phone className="w-10 h-10 mb-4 text-yellow-500" />
             <p className="text-lg font-semibold">Talk to our Solar Experts</p>
-            <p className="text-gray-600 mt-2">📞 0912‑345‑6789</p>
-            <p className="text-gray-600">📧 solarvault@email.com</p>
+            <p className="text-gray-600 mt-2">📞 09069171024</p>
+            <p className="text-gray-600">📧 m.jesus.erwin.suarez@email.com</p>
           </div>
         </div>
       </section>
