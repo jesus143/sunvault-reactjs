@@ -74,23 +74,168 @@ export default function SolarLandingPage() {
       <section className="py-20 bg-gray-50">
         <h2 className="text-3xl font-bold text-center mb-4">Choose Your Power</h2>
         <p className="text-center text-gray-600 mb-12">
-          From basic home backup to full portable power solutions.
+          From basic home backup to full portable power solutions. See how long your appliances can run.
         </p>
 
-        <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto px-6">
-          {[100, 300, 500, 1000].map((w) => (
-            <Card key={w} className="rounded-2xl shadow-md">
-              <CardContent className="p-6 text-center">
-                <h3 className="text-2xl font-bold mb-2">{w}W</h3>
-                <p className="text-gray-600">
-                  Ideal for {w === 100 ? "lights & charging" : 
-                            w === 300 ? "appliances" :
-                            w === 500 ? "heavier loads" :
-                            "tools, fans, TVs, and more"}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-6">
+          {/* 100W Power Station */}
+          <Card className="rounded-2xl shadow-md hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <div className="text-center mb-4">
+                <h3 className="text-2xl font-bold mb-1">100W</h3>
+                <p className="text-sm text-gray-500 mb-2">Battery: 150Wh</p>
+                <p className="text-sm text-gray-600 italic">Best for: Lights & Charging</p>
+              </div>
+              <div className="border-t pt-4 mt-4">
+                <h4 className="text-sm font-semibold mb-3 text-gray-700">Runtime per Item:</h4>
+                <ul className="space-y-2 text-xs">
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">LED Bulb (10W)</span>
+                    <span className="font-semibold">~15 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Phone Charging (5W)</span>
+                    <span className="font-semibold">~30 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">WiFi Router (10W)</span>
+                    <span className="font-semibold">~15 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Small Fan (30W)</span>
+                    <span className="font-semibold">~5 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Radio (15W)</span>
+                    <span className="font-semibold">~10 hrs</span>
+                  </li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 300W Power Station */}
+          <Card className="rounded-2xl shadow-md hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <div className="text-center mb-4">
+                <h3 className="text-2xl font-bold mb-1">300W</h3>
+                <p className="text-sm text-gray-500 mb-2">Battery: 300Wh</p>
+                <p className="text-sm text-gray-600 italic">Perfect for: Light Appliances</p>
+              </div>
+              <div className="border-t pt-4 mt-4">
+                <h4 className="text-sm font-semibold mb-3 text-gray-700">Runtime per Item:</h4>
+                <ul className="space-y-2 text-xs">
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">LED Bulb (10W)</span>
+                    <span className="font-semibold">~30 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Radio (15W)</span>
+                    <span className="font-semibold">~20 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">TV 32"-42" (70W)</span>
+                    <span className="font-semibold">~4 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">WiFi Router (10W)</span>
+                    <span className="font-semibold">~30 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Phone Charging (5W)</span>
+                    <span className="font-semibold">~60 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Small Fan (30W)</span>
+                    <span className="font-semibold">~10 hrs</span>
+                  </li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 500W Power Station */}
+          <Card className="rounded-2xl shadow-md hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <div className="text-center mb-4">
+                <h3 className="text-2xl font-bold mb-1">500W</h3>
+                <p className="text-sm text-gray-500 mb-2">Battery: 600Wh</p>
+                <p className="text-sm text-gray-600 italic">Great for: Medium Loads</p>
+              </div>
+              <div className="border-t pt-4 mt-4">
+                <h4 className="text-sm font-semibold mb-3 text-gray-700">Runtime per Item:</h4>
+                <ul className="space-y-2 text-xs">
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">LED Bulb (10W)</span>
+                    <span className="font-semibold">~60 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Radio (15W)</span>
+                    <span className="font-semibold">~40 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">TV 32"-42" (70W)</span>
+                    <span className="font-semibold">~8 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Mini Ref (80W)</span>
+                    <span className="font-semibold">~7 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">WiFi Router (10W)</span>
+                    <span className="font-semibold">~60 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Phone Charging (5W)</span>
+                    <span className="font-semibold">~120 hrs</span>
+                  </li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 1000W Power Station */}
+          <Card className="rounded-2xl shadow-md hover:shadow-lg transition-shadow border-2 border-yellow-400">
+            <CardContent className="p-6">
+              <div className="text-center mb-4">
+                <h3 className="text-2xl font-bold mb-1">1000W</h3>
+                <p className="text-sm text-gray-500 mb-2">Battery: 1000Wh</p>
+                <p className="text-sm text-yellow-600 font-semibold italic">Most Popular: Full Home Power</p>
+              </div>
+              <div className="border-t pt-4 mt-4">
+                <h4 className="text-sm font-semibold mb-3 text-gray-700">Runtime per Item:</h4>
+                <ul className="space-y-2 text-xs">
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">LED Bulb (10W)</span>
+                    <span className="font-semibold">~100 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Radio (15W)</span>
+                    <span className="font-semibold">~66 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">TV 32"-42" (70W)</span>
+                    <span className="font-semibold">~14 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Mini Ref (80W)</span>
+                    <span className="font-semibold">~12 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">WiFi Router (10W)</span>
+                    <span className="font-semibold">~100 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Phone Charging (5W)</span>
+                    <span className="font-semibold">~200 hrs</span>
+                  </li>
+                </ul>
+                <div className="mt-3 pt-3 border-t">
+                  <p className="text-xs text-gray-500 italic">Can power multiple appliances simultaneously (190W load: ~5 hrs)</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
