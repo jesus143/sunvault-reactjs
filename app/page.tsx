@@ -29,6 +29,8 @@ export default function SolarLandingPage() {
         <Button size="lg" className="rounded-2xl px-8 py-6 text-lg shadow-xl">
           Get a Free Quote
         </Button>
+
+        <img src={'./images/solar-box-b1.png'} width={500} height={200} />
       </section>
 
       {/* Features */}
