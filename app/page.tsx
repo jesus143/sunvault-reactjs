@@ -73,9 +73,35 @@ export default function SolarLandingPage() {
       {/* Power Range */}
       <section className="py-20 bg-gray-50">
         <h2 className="text-3xl font-bold text-center mb-4">Choose Your Power</h2>
-        <p className="text-center text-gray-600 mb-12">
+        <p className="text-center text-gray-600 mb-6">
           From basic home backup to full portable power solutions. See how long your appliances can run.
         </p>
+
+        {/* Important Notice */}
+        <div className="max-w-4xl mx-auto px-6 mb-8">
+          <Card className="rounded-2xl shadow-md bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <Sun className="w-6 h-6 text-yellow-600 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">☀️ Important: Daytime vs Nighttime Power</h3>
+                  <div className="space-y-2 text-sm text-gray-700">
+                    <p>
+                      <span className="font-semibold">During Sunny Days:</span> You can use your appliances 
+                      <span className="font-bold text-green-600"> non-stop, unlimited hours</span> because the solar panels 
+                      power your devices directly while simultaneously charging the battery.
+                    </p>
+                    <p>
+                      <span className="font-semibold">Runtime Hours Shown Below:</span> These hours are for 
+                      <span className="font-bold text-blue-600"> battery-only operation at night</span> (when there's no sunlight). 
+                      The battery capacity determines how long your appliances can run after sunset.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-6">
           {/* 100W Power Station */}
@@ -87,7 +113,8 @@ export default function SolarLandingPage() {
                 <p className="text-sm text-gray-600 italic">Best for: Lights & Charging</p>
               </div>
               <div className="border-t pt-4 mt-4">
-                <h4 className="text-sm font-semibold mb-3 text-gray-700">Runtime per Item:</h4>
+                <h4 className="text-sm font-semibold mb-2 text-gray-700">Battery Runtime (Nighttime):</h4>
+                <p className="text-xs text-gray-500 mb-3 italic">Hours on battery only (no sun)</p>
                 <ul className="space-y-2 text-xs">
                   <li className="flex justify-between">
                     <span className="text-gray-600">LED Bulb (10W)</span>
@@ -123,7 +150,8 @@ export default function SolarLandingPage() {
                 <p className="text-sm text-gray-600 italic">Perfect for: Light Appliances</p>
               </div>
               <div className="border-t pt-4 mt-4">
-                <h4 className="text-sm font-semibold mb-3 text-gray-700">Runtime per Item:</h4>
+                <h4 className="text-sm font-semibold mb-2 text-gray-700">Battery Runtime (Nighttime):</h4>
+                <p className="text-xs text-gray-500 mb-3 italic">Hours on battery only (no sun)</p>
                 <ul className="space-y-2 text-xs">
                   <li className="flex justify-between">
                     <span className="text-gray-600">LED Bulb (10W)</span>
@@ -163,7 +191,8 @@ export default function SolarLandingPage() {
                 <p className="text-sm text-gray-600 italic">Great for: Medium Loads</p>
               </div>
               <div className="border-t pt-4 mt-4">
-                <h4 className="text-sm font-semibold mb-3 text-gray-700">Runtime per Item:</h4>
+                <h4 className="text-sm font-semibold mb-2 text-gray-700">Battery Runtime (Nighttime):</h4>
+                <p className="text-xs text-gray-500 mb-3 italic">Hours on battery only (no sun)</p>
                 <ul className="space-y-2 text-xs">
                   <li className="flex justify-between">
                     <span className="text-gray-600">LED Bulb (10W)</span>
@@ -203,7 +232,8 @@ export default function SolarLandingPage() {
                 <p className="text-sm text-yellow-600 font-semibold italic">Most Popular: Full Home Power</p>
               </div>
               <div className="border-t pt-4 mt-4">
-                <h4 className="text-sm font-semibold mb-3 text-gray-700">Runtime per Item:</h4>
+                <h4 className="text-sm font-semibold mb-2 text-gray-700">Battery Runtime (Nighttime):</h4>
+                <p className="text-xs text-gray-500 mb-3 italic">Hours on battery only (no sun)</p>
                 <ul className="space-y-2 text-xs">
                   <li className="flex justify-between">
                     <span className="text-gray-600">LED Bulb (10W)</span>
