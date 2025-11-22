@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sun, ShieldCheck, Battery, Phone, Box } from "lucide-react";
+import { Sun, ShieldCheck, Battery, Phone, Box, Settings } from "lucide-react";
 
 export default function SolarLandingPage() {
   return (
@@ -262,6 +262,57 @@ export default function SolarLandingPage() {
                 </ul>
                 <div className="mt-3 pt-3 border-t">
                   <p className="text-xs text-gray-500 italic">Can power multiple appliances simultaneously (190W load: ~5 hrs)</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Customizable Power Station - Below the grid */}
+        <div className="max-w-4xl mx-auto px-6 mt-8">
+          <Card className="rounded-2xl shadow-md hover:shadow-lg transition-shadow border-2 border-purple-400 bg-gradient-to-br from-purple-50 to-blue-50">
+            <CardContent className="p-8">
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+                <Settings className="w-16 h-16 text-purple-600 flex-shrink-0" />
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="text-3xl font-bold mb-2">Custom Power Solution</h3>
+                  <p className="text-sm text-gray-500 mb-4">1000W+ • Fully Customizable</p>
+                  <div className="grid md:grid-cols-2 gap-4 mb-6">
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      <li className="flex items-start gap-2">
+                        <span className="text-purple-600 font-bold">✓</span>
+                        <span>Full house or office power</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-purple-600 font-bold">✓</span>
+                        <span>Multiple appliances & AC units</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-purple-600 font-bold">✓</span>
+                        <span>Extended battery capacity</span>
+                      </li>
+                    </ul>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      <li className="flex items-start gap-2">
+                        <span className="text-purple-600 font-bold">✓</span>
+                        <span>Commercial-grade systems</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-purple-600 font-bold">✓</span>
+                        <span>Scalable power output</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-purple-600 font-bold">✓</span>
+                        <span>Professional installation support</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <p className="text-sm text-gray-600 italic mb-4">
+                    Tell us your power needs and we'll design a custom solution perfect for your home or office.
+                  </p>
+                  <Button size="lg" className="rounded-lg bg-purple-600 hover:bg-purple-700 text-white px-8">
+                    Request Custom Quote
+                  </Button>
                 </div>
               </div>
             </CardContent>
