@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sun, ShieldCheck, Battery, Phone, Box, Settings } from "lucide-react";
+import { Sun, ShieldCheck, Battery, Phone, Box, Settings, Target, Zap } from "lucide-react";
 
 export default function SolarLandingPage() {
   return (
@@ -320,6 +320,86 @@ export default function SolarLandingPage() {
         </div>
       </section>
 
+      {/* Mission & Vision */}
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">Our Mission & Vision</h2>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Mission */}
+            <Card className="rounded-2xl shadow-md hover:shadow-lg transition-shadow border-2 border-yellow-300">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="p-3 rounded-full bg-yellow-100">
+                    <Zap className="w-8 h-8 text-yellow-600" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900">Our Mission</h3>
+                </div>
+                <div className="space-y-4 text-gray-700">
+                  <p className="leading-relaxed">
+                    We transform bulky, complex solar panel installations into compact, portable power boxes — 
+                    just like how computers evolved from room-sized mainframes to sleek laptops you can take anywhere.
+                  </p>
+                  <p className="leading-relaxed">
+                    Our mission is to make clean energy <strong className="text-gray-900">affordable, accessible, and simple</strong> for every Filipino household. 
+                    We compress entire solar setups into portable boxes that anyone can install in minutes — 
+                    no technical expertise, no expensive installation fees, no complex wiring.
+                  </p>
+                  <p className="leading-relaxed">
+                    Simply place the box, connect the panels, and power your home. Move it anywhere you need. 
+                    Connect it to your electric provider for hybrid power. <strong className="text-gray-900">Clean energy made simple, portable, and affordable.</strong>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Vision */}
+            <Card className="rounded-2xl shadow-md hover:shadow-lg transition-shadow border-2 border-orange-300">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="p-3 rounded-full bg-orange-100">
+                    <Target className="w-8 h-8 text-orange-600" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900">Our Vision</h3>
+                </div>
+                <div className="space-y-4 text-gray-700">
+                  <p className="leading-relaxed">
+                    We envision a Philippines where every household has access to affordable solar power — 
+                    from 100W for basic needs to 1000W+ for full home and office solutions.
+                  </p>
+                  <p className="leading-relaxed">
+                    Our vision is to democratize clean energy by offering solar power solutions that are:
+                  </p>
+                  <ul className="space-y-2 ml-4">
+                    <li className="flex items-start gap-2">
+                      <span className="text-orange-600 font-bold mt-1">•</span>
+                      <span><strong>Affordable</strong> — no expensive installation costs or upfront fees</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-orange-600 font-bold mt-1">•</span>
+                      <span><strong>Portable</strong> — take your power anywhere, install it anywhere</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-orange-600 font-bold mt-1">•</span>
+                      <span><strong>Simple</strong> — plug-and-play setup that anyone can do</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-orange-600 font-bold mt-1">•</span>
+                      <span><strong>Flexible</strong> — use solar-only, hybrid, or grid backup</span>
+                    </li>
+                  </ul>
+                  <p className="leading-relaxed mt-4">
+                    We believe that clean energy should be accessible to everyone, not just those who can afford 
+                    expensive installations. That's why we're building portable solar power boxes that make 
+                    independence affordable and achievable.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Banner */}
       <section className="py-20 bg-gray-100 text-center">
         <h2 className="text-3xl font-bold mb-4">Affordable Power. Zero Hassle.</h2>
@@ -329,6 +409,70 @@ export default function SolarLandingPage() {
         <Button size="lg" className="rounded-2xl px-10 py-6 text-lg">
           Request Installation
         </Button>
+      </section>
+
+      {/* Founder Section */}
+      <section className="py-20 px-6 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">Meet the Founder</h2>
+          
+          <Card className="rounded-2xl shadow-lg overflow-hidden">
+            <CardContent className="p-0">
+              <div className="flex flex-col md:flex-row">
+                {/* Founder Image */}
+                <div className="md:w-1/3 bg-gradient-to-br from-yellow-100 to-orange-100 flex items-center justify-center p-8">
+                  <div className="relative w-48 h-48 md:w-full md:h-full max-w-xs mx-auto">
+                    <div className="rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-200 aspect-square">
+                      {/* Replace this div with your Image component when you add the founder image */}
+                      <div className="w-full h-full bg-gradient-to-br from-yellow-300 to-orange-400 flex items-center justify-center">
+                        <Sun className="w-24 h-24 text-white opacity-50" />
+                      </div>
+                      {/* Uncomment and update this when you have the founder image:
+                      <Image
+                        src="/images/founder.jpg" 
+                        alt="SolarVault Founder"
+                        width={400}
+                        height={400}
+                        className="w-full h-full object-cover"
+                      />
+                      */}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Founder Information */}
+                <div className="md:w-2/3 p-8 md:p-10">
+                  <h3 className="text-2xl font-bold mb-3 text-gray-900">Jesus Erwin Suarez</h3>
+                  <p className="text-yellow-600 font-semibold mb-4">Founder & CEO</p>
+                  
+                  <div className="space-y-4 text-gray-700">
+                    <p className="leading-relaxed">
+                      With a passion for making clean energy accessible to every Filipino household, 
+                      I founded SolarVault to solve a problem I saw firsthand: traditional solar installations 
+                      are too expensive, too complex, and too permanent.
+                    </p>
+                    <p className="leading-relaxed">
+                      Our mission is simple — <strong className="text-gray-900">bring portable, affordable solar power 
+                      to every home and business in the Philippines.</strong> We believe that clean energy shouldn't 
+                      require expensive installation or technical expertise. That's why we designed SolarVault 
+                      as a portable, plug-and-play solution.
+                    </p>
+                    <p className="leading-relaxed">
+                      Whether you need 100W for basic lighting or 1000W+ for your entire home, we're here 
+                      to help you find the perfect solar solution that fits your needs and budget.
+                    </p>
+                  </div>
+                  
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <p className="text-sm text-gray-600">
+                      <strong>Direct Contact:</strong> 📧 m.jesus.erwin.suarez@email.com | 📞 09069171024
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </section>
 
       {/* Contact Section */}
