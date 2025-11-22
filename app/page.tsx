@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sun, ShieldCheck, Battery, Phone, Box, Settings, Target, Zap } from "lucide-react";
+import { Sun, ShieldCheck, Battery, Phone, Box, Settings, Target, Zap, Mail, MessageCircle } from "lucide-react";
 
 export default function SolarLandingPage() {
   return (
@@ -476,16 +476,91 @@ export default function SolarLandingPage() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 px-6 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12">Contact Us</h2>
-
-        <div className="bg-white rounded-2xl shadow-md p-8">
-          <div className="flex flex-col items-center">
-            <Phone className="w-10 h-10 mb-4 text-yellow-500" />
-            <p className="text-lg font-semibold">Talk to a SolarVault Specialist</p>
-            <p className="text-gray-600 mt-2">📞 09069171024</p>
-            <p className="text-gray-600">📧 m.jesus.erwin.suarez@email.com</p>
+      <section className="py-20 px-6 bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Get in Touch</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Ready to power your home or business with clean, portable solar energy? 
+              Contact us today and let's find the perfect SolarVault solution for you.
+            </p>
           </div>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            {/* Phone Contact */}
+            <Card className="rounded-2xl shadow-lg hover:shadow-xl transition-shadow border-2 border-yellow-300 bg-gradient-to-br from-yellow-50 to-orange-50">
+              <CardContent className="p-8">
+                <div className="flex items-start gap-4">
+                  <div className="p-4 rounded-full bg-yellow-500 text-white flex-shrink-0">
+                    <Phone className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-2 text-gray-900">Call Us</h3>
+                    <p className="text-gray-600 mb-4">
+                      Speak directly with our SolarVault specialists. We're here to answer your questions 
+                      and help you choose the right power solution.
+                    </p>
+                    <a 
+                      href="tel:09069171024" 
+                      className="inline-flex items-center gap-2 text-lg font-semibold text-yellow-600 hover:text-yellow-700 transition-colors"
+                    >
+                      <Phone className="w-5 h-5" />
+                      09069171024
+                    </a>
+                    <p className="text-sm text-gray-500 mt-2">Available for inquiries</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Email Contact */}
+            <Card className="rounded-2xl shadow-lg hover:shadow-xl transition-shadow border-2 border-orange-300 bg-gradient-to-br from-orange-50 to-yellow-50">
+              <CardContent className="p-8">
+                <div className="flex items-start gap-4">
+                  <div className="p-4 rounded-full bg-orange-500 text-white flex-shrink-0">
+                    <Mail className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-2 text-gray-900">Email Us</h3>
+                    <p className="text-gray-600 mb-4">
+                      Send us a message and we'll get back to you within 24 hours with a personalized quote 
+                      and recommendations.
+                    </p>
+                    <a 
+                      href="mailto:m.jesus.erwin.suarez@email.com" 
+                      className="inline-flex items-center gap-2 text-lg font-semibold text-orange-600 hover:text-orange-700 transition-colors break-all"
+                    >
+                      <Mail className="w-5 h-5 flex-shrink-0" />
+                      <span className="text-sm md:text-base">m.jesus.erwin.suarez@email.com</span>
+                    </a>
+                    <p className="text-sm text-gray-500 mt-2">We respond within 24 hours</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Additional Info Card */}
+          <Card className="rounded-2xl shadow-md bg-white border border-gray-200">
+            <CardContent className="p-8">
+              <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+                <div className="p-4 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 text-white">
+                  <MessageCircle className="w-8 h-8" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold mb-2 text-gray-900">Talk to a SolarVault Specialist</h3>
+                  <p className="text-gray-600">
+                    Whether you need 100W for basic needs or 1000W+ for your entire home or office, 
+                    our team is ready to help you find the perfect portable solar solution. Get a free 
+                    consultation and personalized quote today.
+                  </p>
+                </div>
+                <Button size="lg" className="rounded-xl px-8 py-6 text-lg bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg">
+                  Get Free Quote
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
     </div>
