@@ -86,7 +86,7 @@ export default function SolarLandingPage() {
               <div className="flex items-start gap-4">
                 <Sun className="w-6 h-6 text-yellow-600 mt-1 flex-shrink-0" />
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">☀️ Important: Daytime vs Nighttime Power</h3>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">☀️ Important: Daytime vs Nighttime Power & Hybrid</h3>
                   <div className="space-y-2 text-sm text-gray-700">
                     <p>
                       <span className="font-semibold">During Sunny Days:</span> You can use your appliances 
@@ -97,6 +97,11 @@ export default function SolarLandingPage() {
                       <span className="font-semibold">Runtime Hours Shown Below:</span> These hours are for 
                       <span className="font-bold text-blue-600"> battery-only operation at night</span> (when there's no sunlight). 
                       The battery capacity determines how long your appliances can run after sunset.
+                    </p>
+                    <p>
+                      <span className="font-semibold"> Hybrid: </span> 
+                      <span className="font-bold text-blue-600">Once low battery </span>  
+                      System will automatically shift the power to your electric provider such as (ILPI, LANECO & MERALCO)
                     </p>
                   </div>
                 </div>
@@ -138,7 +143,19 @@ export default function SolarLandingPage() {
                     <span className="text-gray-600">Radio (15W)</span>
                     <span className="font-semibold">~10 hrs</span>
                   </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Computer Monitor (20W)</span>
+                    <span className="font-semibold">~{Math.round(150/20)} hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">And more..</span>
+                  </li>
                 </ul>
+                <hr className="mt-5" />
+                <p className="mt-2 text-xs text-green-500 mb-3 italic">Unlimited if day time (with sun)</p> 
+
+
+                <p className="text-2xl"> ₱ 10,500</p>
               </div>
             </CardContent>
           </Card>
@@ -179,7 +196,14 @@ export default function SolarLandingPage() {
                     <span className="text-gray-600">Small Fan (30W)</span>
                     <span className="font-semibold">~10 hrs</span>
                   </li>
+                <li className="flex justify-between">
+                    <span className="text-gray-600">And more..</span>
+                  </li>
                 </ul>
+                <hr className="mt-5" />
+                <p className="mt-2 text-xs text-green-500 mb-3 italic">Unlimited if day time (with sun)</p> 
+
+                <p className="text-2xl"> ₱ 14,500</p>
               </div>
             </CardContent>
           </Card>
@@ -220,7 +244,13 @@ export default function SolarLandingPage() {
                     <span className="text-gray-600">Phone Charging (5W)</span>
                     <span className="font-semibold">~120 hrs</span>
                   </li>
+                <li className="flex justify-between">
+                    <span className="text-gray-600">And more..</span>
+                  </li>
                 </ul>
+                <hr className="mt-5" />
+                <p className="mt-2 text-xs text-green-500 mb-3 italic">Unlimited if day time (with sun)</p> 
+                <p className="text-2xl"> ₱ 19,500</p>
               </div>
             </CardContent>
           </Card>
@@ -261,10 +291,17 @@ export default function SolarLandingPage() {
                     <span className="text-gray-600">Phone Charging (5W)</span>
                     <span className="font-semibold">~200 hrs</span>
                   </li>
-                </ul>
-                <div className="mt-3 pt-3 border-t">
-                  <p className="text-xs text-gray-500 italic">Can power multiple appliances simultaneously (190W load: ~5 hrs)</p>
-                </div>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Freezer (100W)</span>
+                    <span className="font-semibold">~{Math.round(1000/100)} hrs</span>
+                  </li>
+                <li className="flex justify-between">
+                    <span className="text-gray-600">And more..</span>
+                  </li>
+                </ul>  
+                <hr className="mt-5" />
+                <p className="mt-2 text-xs text-green-500 mb-3 italic">Unlimited if day time (with sun)</p> 
+                <p className="text-2xl"> ₱ 29,500</p>
               </div>
             </CardContent>
           </Card>
