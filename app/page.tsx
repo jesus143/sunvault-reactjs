@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sun, ShieldCheck, Battery, Phone, Box, Settings, Target, Zap, Mail, MessageCircle } from "lucide-react";
 
+import Image from "next/image";
+
 export default function SolarLandingPage() {
   return (
     <div className="w-full min-h-screen bg-white text-gray-800">
@@ -423,19 +425,7 @@ export default function SolarLandingPage() {
                 <div className="md:w-1/3 bg-gradient-to-br from-yellow-100 to-orange-100 flex items-center justify-center p-8">
                   <div className="relative w-48 h-48 md:w-full md:h-full max-w-xs mx-auto">
                     <div className="rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-200 aspect-square">
-                      {/* Replace this div with your Image component when you add the founder image */}
-                      <div className="w-full h-full bg-gradient-to-br from-yellow-300 to-orange-400 flex items-center justify-center">
-                        <Sun className="w-24 h-24 text-white opacity-50" />
-                      </div>
-                      {/* Uncomment and update this when you have the founder image:
-                      <Image
-                        src="/images/founder.jpg" 
-                        alt="SolarVault Founder"
-                        width={400}
-                        height={400}
-                        className="w-full h-full object-cover"
-                      />
-                      */}
+                       <img src={'./images/me.png'} width={500} height={200} />
                     </div>
                   </div>
                 </div>
