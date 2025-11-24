@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sun, Battery, Phone, Box, Settings, Target, Zap, Mail, MessageCircle } from "lucide-react";
 import { useUserActivityTracking } from "@/hooks/useUserActivityTracking";
+import Link from "next/link";
+
 export default function SolarLandingPage() {
   // useUserActivityTracking();
   return (
@@ -567,7 +569,6 @@ export default function SolarLandingPage() {
               </CardContent>
             </Card>
           </div>
-
           {/* Additional Info Card */}
           <Card className="rounded-2xl shadow-md bg-white border border-gray-200">
             <CardContent className="p-8">
@@ -575,20 +576,43 @@ export default function SolarLandingPage() {
                 <div className="p-4 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 text-white">
                   <MessageCircle className="w-8 h-8" />
                 </div>
+
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold mb-2 text-gray-900">Talk to a SolarVault Specialist</h3>
+                  <h3 className="text-xl font-bold mb-2 text-gray-900">
+                    Talk to a SolarVault Specialist
+                  </h3>
                   <p className="text-gray-600">
                     Whether you need 100W for basic needs or 1000W+ for your entire home or office, 
                     our team is ready to help you find the perfect portable solar solution. Get a free 
                     consultation and personalized quote today.
                   </p>
                 </div>
-                <Button size="lg" className="rounded-xl px-8 py-6 text-lg bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg">
-                  Get Free Quote
-                </Button>
+
+                <div className="flex flex-col gap-3">
+                  <Button
+                    size="lg"
+                    className="rounded-xl px-8 py-6 text-lg bg-gradient-to-r from-yellow-500 to-orange-500 
+                              hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg"
+                  >
+                    Get Free Quote
+                  </Button>
+
+                  {/* 💡 NEW: Link to Consumption Calculator */}
+                  <Link href="/calculator-consumption">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="rounded-xl px-8 py-6 text-lg border-yellow-500 text-yellow-600 
+                                hover:bg-yellow-50 shadow-sm"
+                    >
+                      Try Consumption Calculator
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </CardContent>
           </Card>
+
         </div>
       </section>
     </div>
