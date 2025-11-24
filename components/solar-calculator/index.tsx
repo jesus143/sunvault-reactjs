@@ -172,7 +172,7 @@ const formatNumber = useCallback((num: number): string =>
               id="capacity"
               type="number"
               value={capacity}
-              onChange={(e) => setCapacity(e.target.value)}
+              onChange={(e) => setCapacity(Number(e.target.value))}
               className="border border-gray-300 p-2 text-sm w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               min=""
             />

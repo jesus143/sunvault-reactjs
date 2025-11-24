@@ -616,7 +616,6 @@ export default function SolarLandingPage() {
                   {/* 💡 NEW: Link to Consumption Calculator */}
                   <Link href="/calculator-consumption">
                     <Button
-                      variant="outline"
                       size="lg"
                       className="rounded-xl px-8 py-6 text-lg border-yellow-500 text-yellow-600 
                                 hover:bg-yellow-50 shadow-sm"
