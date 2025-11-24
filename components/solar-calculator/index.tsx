@@ -129,8 +129,8 @@ const formatNumber = useCallback((num: number): string =>
     });
   };
 
-  const handleQuantityChange = useCallback((id: number, newQuantity: number) => {
-    if (newQuantity < 1) newQuantity = 1;
+  const handleQuantityChange = useCallback((id: number, newQuantity: any) => {
+    if (newQuantity < 1) newQuantity = "";
     setGadgets((prev) =>
       prev.map((g) => (g.id === id ? { ...g, quantity: newQuantity } : g))
     );
