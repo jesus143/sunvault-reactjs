@@ -16,7 +16,7 @@ interface NewGadgetInputs {
   quantity: number | '';
 }
 
-// --- Formatting Helpers (Optimized with useCallback) ---
+// --- Formatting Helpers ---
 const formatHours = (hours: number): string => {
   if (hours === 0) return "0h 0m";
   const h = Math.floor(hours);
@@ -28,7 +28,7 @@ const formatHours = (hours: number): string => {
 // --- Component ---
 export default function SolarCalculator() {
 
-
+// Optimized formatter
 const formatNumber = useCallback((num: number): string => 
   new Intl.NumberFormat().format(num)
 , []);
@@ -109,13 +109,20 @@ const formatNumber = useCallback((num: number): string =>
     setGadgets((prev) => prev.filter((g) => g.id !== id));
   }, []);
 
+  // Handler for adding a gadget when the Enter key is pressed
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      addGadget();
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     
     setNewGadget((prev) => {
       let newValue: string | number = value;
 
-      // FIX: Correctly handle empty string for number inputs
+      // Correctly handle empty string for number inputs
       if (type === 'number') {
         newValue = value === '' ? '' : Number(value);
       }
@@ -126,6 +133,14 @@ const formatNumber = useCallback((num: number): string =>
       };
     });
   };
+
+  // --- NEW: Handle Quantity Change in Gadget List ---
+  const handleQuantityChange = useCallback((id: number, newQuantity: number) => {
+    if (newQuantity < 1) newQuantity = 1; // Enforce minimum quantity
+    setGadgets((prev) =>
+      prev.map((g) => (g.id === id ? { ...g, quantity: newQuantity } : g))
+    );
+  }, []);
 
   // --- Toggle selection ---
   const toggleSelected = useCallback((id: number) => {
@@ -139,7 +154,14 @@ const formatNumber = useCallback((num: number): string =>
     <div className="p-6 max-w-md mx-auto bg-white shadow-xl rounded-lg">
       <h2 className="text-2xl font-extrabold mb-5 text-gray-800 border-b pb-2">🔋 SolarVault Run Time Estimator</h2>
       
+      {/* Display Power-Energy-Time relationship */}
+      <div className="text-center mb-4 text-sm text-gray-600 italic">
+        Run Time (h) = Battery Capacity (Wh) / Total Power Draw (W)
+      </div>
       
+
+[Image of Power Energy Time triangle formula]
+
 
       {/* Capacity Input */}
       <div className="mb-6">
@@ -160,20 +182,22 @@ const formatNumber = useCallback((num: number): string =>
       <div className="mb-6 border p-4 rounded-lg bg-gray-50">
         <h3 className="font-semibold text-lg mb-3 text-gray-700">Add New Load</h3>
         <div className="space-y-3">
-          {/* FIX: Use proper htmlFor and id for accessibility and correct label association */}
           <div>
             <label htmlFor="gadget-name" className="block text-sm font-medium text-gray-700 mb-1">Gadget Name</label>
             <input type="text" id="gadget-name" name="name" value={name} onChange={handleInputChange}
+              onKeyDown={handleKeyDown} // Add on Enter
               className="border border-gray-300 p-2 w-full rounded-md" placeholder="Laptop, Fan, Light" />
           </div>
           <div>
             <label htmlFor="gadget-wattage" className="block text-sm font-medium text-gray-700 mb-1">Wattage (W)</label>
             <input type="number" id="gadget-wattage" name="wattage" value={wattage} onChange={handleInputChange}
+              onKeyDown={handleKeyDown} // Add on Enter
               className="border border-gray-300 p-2 w-full rounded-md" min="1" placeholder="e.g., 65" />
           </div>
           <div>
             <label htmlFor="gadget-quantity" className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
             <input type="number" id="gadget-quantity" name="quantity" value={quantity} onChange={handleInputChange}
+              onKeyDown={handleKeyDown} // Add on Enter
               className="border border-gray-300 p-2 w-full rounded-md" min="1" placeholder="e.g., 1" />
           </div>
         </div>
@@ -195,34 +219,54 @@ const formatNumber = useCallback((num: number): string =>
 
       {/* Gadget List */}
       <div className="mb-6">
-        <h3 className="font-bold text-xl mb-3 text-gray-800">Current Loads ({gadgets.length})</h3>
+        <h3 className="font-bold text-xl mb-3 text-gray-800">Current Loads ({
+        
+          gadgets.filter(g => g.selected === true).length
+ 
+        
+        })</h3>
         <ul className="divide-y divide-gray-200">
           {gadgets.map((g) => {
             const totalEnergy = g.wattage * g.quantity;
             return (
-              <li key={g.id} className={`py-2 flex justify-between items-center text-sm ${g.selected ? 'opacity-100' : 'opacity-50 italic bg-gray-50 rounded px-2'}`}>
+              <li key={g.id} className={`py-2 flex justify-between items-start text-sm ${g.selected ? 'opacity-100' : 'opacity-50 italic bg-gray-50 rounded px-2'}`}>
                 <div className="flex-1 flex items-center gap-2">
                   <input
                     type="checkbox"
                     checked={g.selected}
                     onChange={() => toggleSelected(g.id)}
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-1"
+                    aria-label={`Select ${g.name}`}
                   />
- 
-
-                  <div>
+                  <div className="flex-1">
                     <p className="font-medium">{g.name} <span className="text-gray-400 text-xs">({g.selected ? 'Selected' : 'Omitted'})</span></p>
-                    <p className="text-gray-500 text-xs">{g.wattage}W x {g.quantity} = {formatNumber(totalEnergy)} Wh</p>
+                    <p className="text-gray-500 text-xs">{g.wattage}W x <span className="font-bold">{g.quantity}</span> = {formatNumber(totalEnergy)} Wh/hr</p>
                   </div>
                 </div>
+
+                {/* NEW: Dynamic Quantity Input */}
+                <div className="flex flex-col items-end">
+                    <label htmlFor={`qty-${g.id}`} className="block text-xs font-medium text-gray-700 mb-1">Qty</label>
+                    <input
+                        id={`qty-${g.id}`}
+                        type="number"
+                        value={g.quantity}
+                        onChange={(e) => handleQuantityChange(g.id, Number(e.target.value))}
+                        className="w-12 text-center border border-gray-300 p-1 rounded-md text-sm"
+                        min="1"
+                        aria-label={`Quantity of ${g.name}`}
+                    />
+                </div>
+                
                 <button onClick={() => removeGadget(g.id)}
-                  className="text-red-500 hover:text-red-700 text-xs font-semibold ml-4 p-1 rounded">
+                  className="text-red-500 hover:text-red-700 text-xs font-semibold ml-4 p-1 rounded self-center"
+                  aria-label={`Remove ${g.name}`}>
                   Remove
                 </button>
               </li>
             );
           })}
-          {gadgets.length === 0 && <p className="text-gray-400 italic text-center py-4">No gadgets added yet.</p>}
+          {gadgets.length === 0 && <p className="text-gray-400 italic text-center py-4">No loads added yet.</p>}
         </ul>
       </div>
 
