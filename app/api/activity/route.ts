@@ -30,7 +30,6 @@ export async function POST(req: NextRequest) {
   const userAgent = req.headers.get("user-agent");
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0] ||
-    req.ip ||
     "Unknown";
 
   const { browser, os, device } = parseUserAgent(userAgent);
