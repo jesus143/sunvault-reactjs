@@ -1,20 +1,24 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { recordActivity } from "@/services/activityService";
+// Assuming this path is correct for your project
+import { recordActivity } from "@/services/activityService"; 
 
 export function useUserActivityTracking() {
   const scrollMilestones = useRef(new Set<number>());
   const typingTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  // Log page load ONCE
+  // 1. Log page load ONCE
   useEffect(() => {
     recordActivity("Page loaded");
   }, []);
 
-  // Scroll tracking (only logs 25%, 50%, 75%, 100% ONCE)
+// ---
+
+  // 2. Scroll tracking (only logs 25%, 50%, 75%, 100% ONCE)
   useEffect(() => {
     const handleScroll = () => {
+      // Calculate scroll percentage
       const scrolled =
         (window.scrollY / (document.body.scrollHeight - window.innerHeight)) *
         100;
@@ -33,40 +37,58 @@ export function useUserActivityTracking() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Button + Link clicks only
+// ---
+
+  // 3. ALL clicks tracking (REPLACED original limited tracking)
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (!target) return;
 
-      // Only log meaningful clicks
-      if (target.tagName === "BUTTON") {
-        const label = target.innerText || "Unnamed button";
-        recordActivity(`Button clicked: ${label}`);
+      const tagName = target.tagName;
+      
+      // Attempt to find the best identifier for the clicked element
+      const identifier = 
+        target.id || 
+        target.getAttribute('name') || 
+        target.innerText?.substring(0, 30).trim() || 
+        tagName;
+
+      let logMessage = `Clicked on ${tagName}`;
+
+      if (tagName === "BUTTON") {
+        logMessage = `Button clicked: ${identifier}`;
+      } else if (tagName === "A") {
+        logMessage = `Link clicked: ${target.getAttribute("href")}`;
+      } else if (tagName === "INPUT" || tagName === "TEXTAREA" || tagName === "SELECT") {
+        logMessage = `Form control clicked: ${identifier}`;
+      } else {
+        // General click log for any other element (e.g., div, span, h1)
+        logMessage = `Clicked on element: ${identifier}`;
       }
 
-      // Detect <a> link clicks
-      if (target.tagName === "A") {
-        recordActivity(`Link clicked: ${target.getAttribute("href")}`);
-      }
+      recordActivity(logMessage);
     };
 
     window.addEventListener("click", handleClick);
     return () => window.removeEventListener("click", handleClick);
   }, []);
 
-  // Debounced input typing tracking (fires AFTER user stops typing)
+// ---
+
+  // 4. Debounced input typing tracking (fires AFTER user stops typing)
   useEffect(() => {
     const handleInput = (e: Event) => {
       const target = e.target as HTMLInputElement;
       if (!target) return;
 
+      // Only track inputs in form fields
       if (target.tagName !== "INPUT" && target.tagName !== "TEXTAREA") return;
 
-      // Clear old timeout
+      // Clear old timeout to debounce the activity log
       if (typingTimeout.current) clearTimeout(typingTimeout.current);
 
-      // Log only after user stops typing for 1 second
+      // Log only after user stops typing for 1 second (1000ms)
       typingTimeout.current = setTimeout(() => {
         recordActivity(`Typed in field: ${target.name || target.id}`);
       }, 1000);
@@ -76,7 +98,9 @@ export function useUserActivityTracking() {
     return () => window.removeEventListener("input", handleInput);
   }, []);
 
-  // Time spent (fires once)
+// ---
+
+  // 5. Time spent (fires once when user leaves the page)
   useEffect(() => {
     const start = Date.now();
 
