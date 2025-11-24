@@ -2,21 +2,10 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sun, ShieldCheck, Battery, Phone, Box, Settings, Target, Zap, Mail, MessageCircle } from "lucide-react";
-
+import { Sun, Battery, Phone, Box, Settings, Target, Zap, Mail, MessageCircle } from "lucide-react";
 import { useUserActivityTracking } from "@/hooks/useUserActivityTracking";
-
-import Image from "next/image";
-import { useEffect } from "react";
-
-import {recordActivity} from "@/services/activityService";
-
 export default function SolarLandingPage() {
-
-
-     useUserActivityTracking();
- 
-
+  // useUserActivityTracking();
   return (
     <div className="w-full min-h-screen bg-white text-gray-800">
       {/* Hero Section */}
