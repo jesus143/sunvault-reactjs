@@ -135,6 +135,10 @@ export default function SolarLandingPage() {
                     <span className="font-semibold">~30 hrs</span>
                   </li>
                   <li className="flex justify-between">
+                    <span className="text-gray-600">Laptop Charging 25(W)</span>
+                    <span className="font-semibold">~{144/25} hrs</span>
+                  </li>
+                  <li className="flex justify-between">
                     <span className="text-gray-600">WiFi Router (10W)</span>
                     <span className="font-semibold">~15 hrs</span>
                   </li>
@@ -158,7 +162,7 @@ export default function SolarLandingPage() {
                 <p className="mt-2 text-xs text-green-500 mb-3 italic">Unlimited if day time (with sun)</p> 
 
 
-                <p className="text-2xl"> ₱ 10,500</p>
+                <p className="text-2xl"> ₱ 9,800</p>
               </div>
             </CardContent>
           </Card>
@@ -194,6 +198,10 @@ export default function SolarLandingPage() {
                   <li className="flex justify-between">
                     <span className="text-gray-600">Phone Charging (5W)</span>
                     <span className="font-semibold">~60 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Laptop Charging 25(W)</span>
+                    <span className="font-semibold">~{300/25} hrs</span>
                   </li>
                   <li className="flex justify-between">
                     <span className="text-gray-600">Small Fan (30W)</span>
@@ -247,6 +255,10 @@ export default function SolarLandingPage() {
                     <span className="text-gray-600">Phone Charging (5W)</span>
                     <span className="font-semibold">~120 hrs</span>
                   </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Laptop Charging 25(W)</span>
+                    <span className="font-semibold">~{500/25} hrs</span>
+                  </li>
                 <li className="flex justify-between">
                     <span className="text-gray-600">And more..</span>
                   </li>
@@ -293,6 +305,10 @@ export default function SolarLandingPage() {
                   <li className="flex justify-between">
                     <span className="text-gray-600">Phone Charging (5W)</span>
                     <span className="font-semibold">~200 hrs</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-gray-600">Laptop Charging 25(W)</span>
+                    <span className="font-semibold">~{1000/25} hrs</span>
                   </li>
                   <li className="flex justify-between">
                     <span className="text-gray-600">Freezer (100W)</span>
