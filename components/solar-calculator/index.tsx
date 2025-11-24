@@ -56,7 +56,7 @@ const formatNumber = useCallback((num: number): string =>
     return [];
   };
 
-  const [capacity, setCapacity] = useState<number>(getInitialCapacity);
+  const [capacity, setCapacity] = useState(getInitialCapacity);
   const [gadgets, setGadgets] = useState<Gadget[]>(getInitialGadgets);
   const [newGadget, setNewGadget] = useState<NewGadgetInputs>({
     name: "",
@@ -154,7 +154,7 @@ const formatNumber = useCallback((num: number): string =>
       </div>
       
 
-[Image of Power Energy Time triangle formula]
+      [Image of Power Energy Time triangle formula]
 
 
       {/* UPDATED: Flex container for side-by-side layout with gap */}
@@ -172,9 +172,9 @@ const formatNumber = useCallback((num: number): string =>
               id="capacity"
               type="number"
               value={capacity}
-              onChange={(e) => setCapacity(Math.max(0, Number(e.target.value)))}
+              onChange={(e) => setCapacity(e.target.value)}
               className="border border-gray-300 p-2 text-sm w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              min="0"
+              min=""
             />
           </div>
 
@@ -192,13 +192,13 @@ const formatNumber = useCallback((num: number): string =>
                 <label htmlFor="gadget-wattage" className="block text-sm font-medium text-gray-700 mb-1">Wattage (W)</label>
                 <input type="number" id="gadget-wattage" name="wattage" value={wattage} onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
-                  className="border border-gray-300 p-2 text-sm w-full rounded-md" min="1" placeholder="e.g., 65" />
+                  className="border border-gray-300 p-2 text-sm w-full rounded-md" min="" placeholder="e.g., 65" />
               </div>
               <div>
                 <label htmlFor="gadget-quantity" className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
                 <input type="number" id="gadget-quantity" name="quantity" value={quantity} onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
-                  className="border border-gray-300 p-2 text-sm w-full rounded-md" min="1" placeholder="e.g., 1" />
+                  className="border border-gray-300 p-2 text-sm w-full rounded-md" min="" placeholder="e.g., 1" />
               </div>
             </div>
             
