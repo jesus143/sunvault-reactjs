@@ -4,9 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sun, ShieldCheck, Battery, Phone, Box, Settings, Target, Zap, Mail, MessageCircle } from "lucide-react";
 
+import { useUserActivityTracking } from "@/hooks/useUserActivityTracking";
+
 import Image from "next/image";
+import { useEffect } from "react";
+
+import {recordActivity} from "@/services/activityService";
 
 export default function SolarLandingPage() {
+
+
+     useUserActivityTracking();
+ 
+
   return (
     <div className="w-full min-h-screen bg-white text-gray-800">
       {/* Hero Section */}
@@ -28,7 +38,9 @@ export default function SolarLandingPage() {
           A compact, plug-and-play solar setup that brings clean power anywhere. 
           From 100W to 1000W — SolarVault makes solar energy simple, affordable, and portable.
         </motion.p>
-        <Button size="lg" className="rounded-2xl px-8 py-6 text-lg shadow-xl">
+        <Button 
+          
+        size="lg" className="rounded-2xl px-8 py-6 text-lg shadow-xl">
           Get a Free Quote
         </Button>
 
