@@ -7,7 +7,7 @@ import { useUserActivityTracking } from "@/hooks/useUserActivityTracking";
 import Link from "next/link";
 
 export default function SolarLandingPage() {
-  // useUserActivityTracking();
+   useUserActivityTracking();
   return (
     <div className="w-full min-h-screen bg-white text-gray-800">
       {/* Hero Section */}

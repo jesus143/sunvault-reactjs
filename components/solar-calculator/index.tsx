@@ -166,7 +166,7 @@ const formatNumber = useCallback((num: number): string =>
           {/* Capacity Input */}
           <div className="mb-4">
             <label htmlFor="capacity" className="block text-sm font-medium text-gray-700 mb-1">
-              Battery Capacity (Wh)
+              Panel / Battery Capacity (Wh)
             </label>
             <input
               id="capacity"
