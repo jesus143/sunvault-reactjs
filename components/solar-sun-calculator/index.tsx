@@ -24,10 +24,12 @@ const PERSISTED_KEYS = [
 type InputKey = (typeof PERSISTED_KEYS)[number];
 type NumericInputs = Omit<Inputs, 'sunPercent'>;
 
+// Type used for component state (all fields are strings to allow empty input, except the number slider)
 type InputState = {
   [K in keyof NumericInputs]: string;
 } & { sunPercent: number };
 
+// Type used for calculations (all fields are numbers)
 type Inputs = {
   sunPercent: number; 
   panelWatt: number; 
@@ -67,7 +69,7 @@ const DEFAULT_INPUTS: Inputs = {
   safetyMargin: 1.1,
 };
 
-// Converts the numeric part of the Inputs object to a string-based InputState
+// Converts the numeric Inputs object to a string-based InputState for input fields
 const convertInputsToState = (inputs: Inputs): InputState => {
   const state: Partial<InputState> = {};
   for (const key in inputs) {
@@ -87,6 +89,7 @@ const convertStateToInputs = (state: InputState): Inputs => {
     if (key === 'sunPercent') {
       (inputs as any)[key] = state[key as keyof InputState];
     } else {
+      // Safely convert string to number, treating empty/invalid string as 0
       const numVal = Number((state as any)[key]);
       (inputs as any)[key] = isNaN(numVal) ? 0 : numVal;
     }
@@ -94,47 +97,66 @@ const convertStateToInputs = (state: InputState): Inputs => {
   return inputs as Inputs;
 };
 
-// Function to load state from localStorage
-const loadState = (defaultState: Inputs): InputState => {
-  const savedState = localStorage.getItem("solarSimulatorInputs");
-  
-  if (!savedState) return convertInputsToState(defaultState);
-
+// Function to load state from localStorage, safe for SSR
+const loadStateFromLocalStorage = (defaultState: Inputs): InputState => {
   try {
-    const parsed = JSON.parse(savedState);
-    
-    const loadedState = convertInputsToState(defaultState);
+    // Check if localStorage is available (i.e., we are on the client)
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const savedState = localStorage.getItem("solarSimulatorInputs");
+        if (savedState) {
+            const parsed = JSON.parse(savedState);
+            const loadedState = convertInputsToState(defaultState);
 
-    PERSISTED_KEYS.forEach(key => {
-        if (parsed[key] !== undefined && parsed[key] !== null) {
-            (loadedState as any)[key] = key === 'sunPercent' 
-                ? Number(parsed[key]) 
-                : String(parsed[key]);
+            PERSISTED_KEYS.forEach(key => {
+                if (parsed[key] !== undefined && parsed[key] !== null) {
+                    (loadedState as any)[key] = key === 'sunPercent' 
+                        ? Number(parsed[key]) 
+                        : String(parsed[key]);
+                }
+            });
+            return loadedState;
         }
-    });
-
-    return loadedState;
+    }
   } catch (e) {
-    console.error("Failed to parse state from local storage:", e);
-    return convertInputsToState(defaultState);
+    console.error("Failed to load state from local storage:", e);
   }
+  
+  // If no saved state or running on the server, return the default state
+  return convertInputsToState(defaultState);
 };
 
 
 export default function SolarSunCalculator() {
-  const [inputState, setInputState] = useState<InputState>(() => loadState(DEFAULT_INPUTS));
   
+  // Initialize state safely with defaults for SSR
+  const [inputState, setInputState] = useState<InputState>(convertInputsToState(DEFAULT_INPUTS));
+  const [hasLoaded, setHasLoaded] = useState(false); // Tracks client-side load completion
+
+  // Convert string state to numeric inputs for use in useMemo
   const inputs = useMemo(() => convertStateToInputs(inputState), [inputState]);
 
-  // --- LOCAL STORAGE EFFECT ---
+  // --- LOCAL STORAGE LOAD EFFECT (Runs ONLY ONCE after mount) ---
   useEffect(() => {
-    const stateToSave: Partial<InputState> = {};
-    PERSISTED_KEYS.forEach(key => {
-        stateToSave[key as InputKey] = inputState[key as InputKey];
-    });
+    // This code ONLY runs in the browser.
+    const initialState = loadStateFromLocalStorage(DEFAULT_INPUTS);
+    setInputState(initialState);
+    setHasLoaded(true); // Data is now loaded from client storage
+  }, []); 
 
-    localStorage.setItem("solarSimulatorInputs", JSON.stringify(stateToSave));
-  }, [inputState]);
+  // --- LOCAL STORAGE SAVE EFFECT (Runs after load and every state change) ---
+  useEffect(() => {
+    // Only save if we have finished loading the initial state from localStorage
+    if (hasLoaded) { 
+        // Use Record type to satisfy TypeScript
+        const stateToSave: Record<InputKey, string | number> = {} as Record<InputKey, string | number>;
+        
+        PERSISTED_KEYS.forEach(key => {
+            stateToSave[key] = inputState[key as InputKey];
+        });
+
+        localStorage.setItem("solarSimulatorInputs", JSON.stringify(stateToSave));
+    }
+  }, [inputState, hasLoaded]);
   // ----------------------------
 
   function update(key: InputKey, value: string | number) {
