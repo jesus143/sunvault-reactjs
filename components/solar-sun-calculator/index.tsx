@@ -1,56 +1,148 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 
-// Solar Simulator Component (React + TypeScript)
-// Single-file component suitable for inclusion in a React + Tailwind project.
-// Features:
-// - Adjustable sun percentage (slider)
-// - Inputs for panel wattage & voltage
-// - Inputs for MPPT current (A) and efficiency (assumed configurable)
-// - Battery voltage and amp-hours
-// - Inverter wattage (rating) and inverter efficiency (or voltage)
-// - Total load wattage
-// - Real-time interactive calculations and warnings
+// --- PERSISTENCE SETUP ---
+// Keys we want to save and load from localStorage
+const PERSISTED_KEYS = [
+  'panelVolt',
+  'panelWatt',
+  'sunPercent',
+  'batteryVolt',
+  'batteryAh',
+  'inverterRatingW',
+  'loadWatts',
+  'panelCount',
+  'mpptCurrentA',
+  'mpptEfficiency',
+  'panelDerate',
+  'peakSunHours',
+  'batteryEfficiency',
+  'batteryDoD',
+  'inverterEfficiency',
+  'safetyMargin',
+] as const; 
+
+type InputKey = (typeof PERSISTED_KEYS)[number];
+type NumericInputs = Omit<Inputs, 'sunPercent'>;
+
+type InputState = {
+  [K in keyof NumericInputs]: string;
+} & { sunPercent: number };
 
 type Inputs = {
-  sunPercent: number; // 0-100
-  panelWatt: number; // per-panel rated watt
-  panelVolt: number; // Vmp or nominal
-  mpptCurrentA: number; // Amp rating of MPPT (charging current capability)
-  mpptEfficiency: number; // 0-1
-  panelDerate: number; // 0-1 (soiling, mismatch)
-  peakSunHours: number; // hours/day
-  batteryVolt: number; // system voltage
-  batteryAh: number; // total Ah
-  batteryEfficiency: number; // 0-1 (roundtrip)
-  batteryDoD: number; // usable fraction 0-1
-  inverterEfficiency: number; // 0-1
-  inverterRatingW: number; // max continuous inverter output
-  loadWatts: number; // total continuous load
-  safetyMargin: number; // fraction to increase needs
+  sunPercent: number; 
+  panelWatt: number; 
+  panelVolt: number; 
+  panelCount: number; 
+  mpptCurrentA: number; 
+  mpptEfficiency: number; 
+  panelDerate: number; 
+  peakSunHours: number; 
+  batteryVolt: number; 
+  batteryAh: number; 
+  batteryEfficiency: number; 
+  batteryDoD: number; 
+  inverterEfficiency: number; 
+  inverterRatingW: number; 
+  loadWatts: number; 
+  safetyMargin: number; 
 };
 
-export default function SolarSimulator() {
-  const [inputs, setInputs] = useState<Inputs>({
-    sunPercent: 60,
-    panelWatt: 400,
-    panelVolt: 36,
-    mpptCurrentA: 15,
-    mpptEfficiency: 0.97,
-    panelDerate: 0.85,
-    peakSunHours: 5,
-    batteryVolt: 48,
-    batteryAh: 100,
-    batteryEfficiency: 0.9,
-    batteryDoD: 0.8,
-    inverterEfficiency: 0.9,
-    inverterRatingW: 2000,
-    loadWatts: 150,
-    safetyMargin: 1.1,
-  });
+// Define initial default values
+const DEFAULT_INPUTS: Inputs = {
+  sunPercent: 60,
+  panelWatt: 400,
+  panelVolt: 36,
+  panelCount: 5,
+  mpptCurrentA: 15,
+  mpptEfficiency: 0.97,
+  panelDerate: 0.85,
+  peakSunHours: 5,
+  batteryVolt: 48,
+  batteryAh: 100,
+  batteryEfficiency: 0.9,
+  batteryDoD: 0.8,
+  inverterEfficiency: 0.9,
+  inverterRatingW: 2000,
+  loadWatts: 150,
+  safetyMargin: 1.1,
+};
 
-  function update<K extends keyof Inputs>(key: K, raw: any) {
-    const value = raw === "" ? "" : Number(raw);
-    setInputs((s) => ({ ...s, [key]: value as any }));
+// Converts the numeric part of the Inputs object to a string-based InputState
+const convertInputsToState = (inputs: Inputs): InputState => {
+  const state: Partial<InputState> = {};
+  for (const key in inputs) {
+    if (key === 'sunPercent') {
+      (state as any)[key] = inputs[key as keyof Inputs];
+    } else {
+      (state as any)[key] = String(inputs[key as keyof Inputs]);
+    }
+  }
+  return state as InputState;
+};
+
+// Converts the string-based InputState back to numeric Inputs for calculations
+const convertStateToInputs = (state: InputState): Inputs => {
+  const inputs: Partial<Inputs> = {};
+  for (const key in state) {
+    if (key === 'sunPercent') {
+      (inputs as any)[key] = state[key as keyof InputState];
+    } else {
+      const numVal = Number((state as any)[key]);
+      (inputs as any)[key] = isNaN(numVal) ? 0 : numVal;
+    }
+  }
+  return inputs as Inputs;
+};
+
+// Function to load state from localStorage
+const loadState = (defaultState: Inputs): InputState => {
+  const savedState = localStorage.getItem("solarSimulatorInputs");
+  
+  if (!savedState) return convertInputsToState(defaultState);
+
+  try {
+    const parsed = JSON.parse(savedState);
+    
+    const loadedState = convertInputsToState(defaultState);
+
+    PERSISTED_KEYS.forEach(key => {
+        if (parsed[key] !== undefined && parsed[key] !== null) {
+            (loadedState as any)[key] = key === 'sunPercent' 
+                ? Number(parsed[key]) 
+                : String(parsed[key]);
+        }
+    });
+
+    return loadedState;
+  } catch (e) {
+    console.error("Failed to parse state from local storage:", e);
+    return convertInputsToState(defaultState);
+  }
+};
+
+
+export default function SolarSunCalculator() {
+  const [inputState, setInputState] = useState<InputState>(() => loadState(DEFAULT_INPUTS));
+  
+  const inputs = useMemo(() => convertStateToInputs(inputState), [inputState]);
+
+  // --- LOCAL STORAGE EFFECT ---
+  useEffect(() => {
+    const stateToSave: Partial<InputState> = {};
+    PERSISTED_KEYS.forEach(key => {
+        stateToSave[key as InputKey] = inputState[key as InputKey];
+    });
+
+    localStorage.setItem("solarSimulatorInputs", JSON.stringify(stateToSave));
+  }, [inputState]);
+  // ----------------------------
+
+  function update(key: InputKey, value: string | number) {
+    if (key === 'sunPercent' && typeof value === 'number') {
+        setInputState((s) => ({ ...s, [key]: value }));
+    } else if (typeof value === 'string') {
+        setInputState((s) => ({ ...s, [key]: value }));
+    }
   }
 
   // Derived/calculated results
@@ -71,16 +163,18 @@ export default function SolarSimulator() {
       panelVolt,
       inverterRatingW,
       safetyMargin,
+      panelCount, 
     } = inputs;
 
-    // Instantaneous panel output under current sun % (per panel)
-    const panelInstantW = (panelWatt * (sunPercent / 100)) || 0;
-    const panelAfterDerate = panelInstantW * panelDerate;
-    const panelAfterMppt = panelAfterDerate * mpptEfficiency;
-    const acAvailablePerPanel = panelAfterMppt * inverterEfficiency;
+    // --- PER PANEL CALCULATIONS ---
+    const panelInstantW_per = (panelWatt * (sunPercent / 100)) || 0;
+    const panelAfterDerate_per = panelInstantW_per * panelDerate;
+    const panelAfterMppt_per = panelAfterDerate_per * mpptEfficiency;
+    const acAvailablePerPanel = panelAfterMppt_per * inverterEfficiency;
 
-    // Daily energy from one panel (Wh/day)
-    const energyPerPanelWhPerDay = acAvailablePerPanel * peakSunHours;
+    // --- ARRAY (TOTAL SYSTEM) CALCULATIONS ---
+    const totalAcAvailableInstant = acAvailablePerPanel * panelCount;
+    const totalEnergyWhPerDay = acAvailablePerPanel * peakSunHours * panelCount;
 
     // Load daily requirement
     const loadDailyWh = loadWatts * 24;
@@ -96,27 +190,14 @@ export default function SolarSimulator() {
     const batteryTotalWh = batteryVolt * batteryAh;
     const batteryUsableWh = batteryTotalWh * batteryDoD * batteryEfficiency;
 
-    // If sun producing right now, net instant surplus or deficit to feed load and charge
-    const instantAcProduced = acAvailablePerPanel; // per panel
-    // Assume user has some number of panels — we can compute based on provided panelWatt and required power suggestions.
-
     // Hours a load can run from battery alone (no sun)
     const hoursFromBattery = batteryUsableWh / (loadWatts || 1);
 
     // Can inverter handle the load?
     const inverterCanHandle = inverterRatingW >= loadWatts;
 
-    // If panels produce enough at current sun% to directly sustain load (instantaneously)
-    const panelsToSustainInstant = (loadWatts / (acAvailablePerPanel || 0)) || Infinity;
-
-    // If the user has at least this many panels (rounded up) they'd sustain the load right now
-
-    // Estimate low battery or trip: if battery will drain below DoD before sun returns — we provide a simple heuristic
-    // We'll estimate hours until battery depletion (without sun charging)
+    // Estimate low battery or trip
     const hoursUntilDepletion_noSun = hoursFromBattery;
-
-    // If panels produce less than load, there is deficit. Compute net instant deficit per panel count
-    const netInstantPerPanel = acAvailablePerPanel - loadWatts; // negative if deficit per panel (assuming 1 panel)
 
     // Provide recommended battery Ah for 24h autonomy of current load
     const recommendedBatteryWhFor24h = loadWatts * 24 * safetyMargin;
@@ -126,102 +207,114 @@ export default function SolarSimulator() {
     const recommendedPanelCountFor24h = Math.ceil(requiredPanelPowerFor24h / (panelWatt || 1));
 
     // Minimum MPPT current required to handle panel DC current at rated power (approx)
-    // panel current (I) = panelP / panelVolt. For the whole array we compute per-panel.
     const panelRatedCurrent = panelWatt / (panelVolt || 1);
     const mpptOkForOnePanel = mpptCurrentA >= panelRatedCurrent;
 
-    // quick status flags
-    const canBeContinuousNow = acAvailablePerPanel * recommendedPanelCountFor24h >= loadWatts && inverterCanHandle;
+    // --- STATUS FLAGS ---
+    const arraySufficientInstant = totalAcAvailableInstant >= loadWatts;
+    const arraySufficientDaily = totalEnergyWhPerDay >= loadDailyWh * safetyMargin;
+    const canBeContinuous = arraySufficientDaily && inverterCanHandle;
+
 
     return {
-      panelInstantW,
-      panelAfterDerate,
-      panelAfterMppt,
+      panelInstantW_per,
+      panelAfterDerate_per,
+      panelAfterMppt_per,
       acAvailablePerPanel,
-      energyPerPanelWhPerDay,
+      totalAcAvailableInstant,
+      totalEnergyWhPerDay,
       loadDailyWh,
       requiredPanelPowerFor24h,
       batteryTotalWh,
       batteryUsableWh,
       hoursFromBattery,
       inverterCanHandle,
-      panelsToSustainInstant,
       hoursUntilDepletion_noSun,
       recommendedBatteryAh48v,
       recommendedPanelCountFor24h,
       panelRatedCurrent,
       mpptOkForOnePanel,
-      canBeContinuousNow,
+      canBeContinuous,
+      arraySufficientInstant,
+      arraySufficientDaily,
     };
   }, [inputs]);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Solar + Battery Simulator (React + TypeScript)</h1>
-      <p className="text-sm text-gray-600 mb-6">Interactive — change any input and see realtime results.</p>
+      <p className="text-sm text-gray-600 mb-6">Interactive — change any input and see realtime results. <span className="font-semibold text-green-700">Inputs are now saved automatically! 💾</span></p>
 
       <div className="grid md:grid-cols-2 gap-6 mb-6">
         {/* Inputs column */}
         <div className="space-y-4 p-4 border rounded-lg shadow-sm bg-white">
           <h2 className="font-semibold">Solar & MPPT</h2>
 
-          <label className="block text-xs">Sun %: {inputs.sunPercent}%</label>
+          <label className="block text-xs">Sun %: {inputState.sunPercent}% (Default: {DEFAULT_INPUTS.sunPercent}%)</label>
           <input
             type="range"
             min={0}
             max={100}
-            value={inputs.sunPercent}
-            onChange={(e) => update("sunPercent", e.target.value)}
+            value={inputState.sunPercent}
+            onChange={(e) => update("sunPercent", Number(e.target.value))}
             className="w-full"
           />
 
-          <label className="block text-xs">Panel rated watt (W)</label>
+          <label className="block text-xs">Panel rated watt (W) (Default: {DEFAULT_INPUTS.panelWatt})</label>
           <input
             type="number"
-            value={inputs.panelWatt}
+            value={inputState.panelWatt}
             onChange={(e) => update("panelWatt", e.target.value)}
             className="w-full p-2 border rounded"
           />
+          
+          <label className="block text-xs">Total Panel Quantity (Default: {DEFAULT_INPUTS.panelCount})</label>
+          <input 
+            type="number"
+            value={inputState.panelCount}
+            onChange={(e) => update("panelCount", e.target.value)}
+            className="w-full p-2 border rounded"
+          />
 
-          <label className="block text-xs">Panel voltage (V)</label>
+          <label className="block text-xs">Panel voltage (V) (Default: {DEFAULT_INPUTS.panelVolt})</label>
           <input
             type="number"
-            value={inputs.panelVolt}
+            value={inputState.panelVolt}
             onChange={(e) => update("panelVolt", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
-          <label className="block text-xs">Panel derate (soiling,mismatch) (0-1)</label>
+          <label className="block text-xs">Panel derate (soiling,mismatch) (0-1) (Default: {DEFAULT_INPUTS.panelDerate})</label>
           <input
             type="number"
             step="0.01"
-            value={inputs.panelDerate}
+            value={inputState.panelDerate}
             onChange={(e) => update("panelDerate", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
-          <label className="block text-xs">Peak sun hours (hrs/day)</label>
+          <label className="block text-xs">Peak sun hours (hrs/day) (Default: {DEFAULT_INPUTS.peakSunHours})</label>
           <input
             type="number"
             step="0.1"
-            value={inputs.peakSunHours}
+            value={inputState.peakSunHours}
             onChange={(e) => update("peakSunHours", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
-          <label className="block text-xs">MPPT current (A)</label>
+          <label className="block text-xs">MPPT current (A) (Default: {DEFAULT_INPUTS.mpptCurrentA})</label>
           <input
             type="number"
-            value={inputs.mpptCurrentA}
+            value={inputState.mpptCurrentA}
             onChange={(e) => update("mpptCurrentA", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
-          <label className="block text-xs">MPPT efficiency (0-1)</label>
+          <label className="block text-xs">MPPT efficiency (0-1) (Default: {DEFAULT_INPUTS.mpptEfficiency})</label>
           <input
             type="number"
             step="0.01"
-            value={inputs.mpptEfficiency}
+            value={inputState.mpptEfficiency}
             onChange={(e) => update("mpptEfficiency", e.target.value)}
             className="w-full p-2 border rounded"
           />
@@ -231,70 +324,70 @@ export default function SolarSimulator() {
         <div className="space-y-4 p-4 border rounded-lg shadow-sm bg-white">
           <h2 className="font-semibold">Battery, Inverter & Load</h2>
 
-          <label className="block text-xs">Battery voltage (V)</label>
+          <label className="block text-xs">Battery voltage (V) (Default: {DEFAULT_INPUTS.batteryVolt})</label>
           <input
             type="number"
-            value={inputs.batteryVolt}
+            value={inputState.batteryVolt}
             onChange={(e) => update("batteryVolt", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
-          <label className="block text-xs">Battery amp-hours (Ah)</label>
+          <label className="block text-xs">Battery amp-hours (Ah) (Default: {DEFAULT_INPUTS.batteryAh})</label>
           <input
             type="number"
-            value={inputs.batteryAh}
+            value={inputState.batteryAh}
             onChange={(e) => update("batteryAh", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
-          <label className="block text-xs">Battery efficiency (roundtrip) (0-1)</label>
+          <label className="block text-xs">Battery efficiency (roundtrip) (0-1) (Default: {DEFAULT_INPUTS.batteryEfficiency})</label>
           <input
             type="number"
             step="0.01"
-            value={inputs.batteryEfficiency}
+            value={inputState.batteryEfficiency}
             onChange={(e) => update("batteryEfficiency", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
-          <label className="block text-xs">Battery DoD (usable fraction) (0-1)</label>
+          <label className="block text-xs">Battery DoD (usable fraction) (0-1) (Default: {DEFAULT_INPUTS.batteryDoD})</label>
           <input
             type="number"
             step="0.01"
-            value={inputs.batteryDoD}
+            value={inputState.batteryDoD}
             onChange={(e) => update("batteryDoD", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
-          <label className="block text-xs">Inverter efficiency (0-1)</label>
+          <label className="block text-xs">Inverter efficiency (0-1) (Default: {DEFAULT_INPUTS.inverterEfficiency})</label>
           <input
             type="number"
             step="0.01"
-            value={inputs.inverterEfficiency}
+            value={inputState.inverterEfficiency}
             onChange={(e) => update("inverterEfficiency", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
-          <label className="block text-xs">Inverter rating (W)</label>
+          <label className="block text-xs">Inverter rating (W) (Default: {DEFAULT_INPUTS.inverterRatingW})</label>
           <input
             type="number"
-            value={inputs.inverterRatingW}
+            value={inputState.inverterRatingW}
             onChange={(e) => update("inverterRatingW", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
-          <label className="block text-xs">Total load (W)</label>
+          <label className="block text-xs">Total load (W) (Default: {DEFAULT_INPUTS.loadWatts})</label>
           <input
             type="number"
-            value={inputs.loadWatts}
+            value={inputState.loadWatts}
             onChange={(e) => update("loadWatts", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
-          <label className="block text-xs">Safety margin (e.g. 1.1 = 10%)</label>
+          <label className="block text-xs">Safety margin (e.g. 1.1 = 10%) (Default: {DEFAULT_INPUTS.safetyMargin})</label>
           <input
             type="number"
             step="0.01"
-            value={inputs.safetyMargin}
+            value={inputState.safetyMargin}
             onChange={(e) => update("safetyMargin", e.target.value)}
             className="w-full p-2 border rounded"
           />
@@ -304,21 +397,18 @@ export default function SolarSimulator() {
       {/* Results */}
       <div className="grid md:grid-cols-2 gap-6">
         <div className="p-4 border rounded-lg bg-white shadow-sm">
-          <h3 className="font-semibold mb-2">Instant & Daily</h3>
+          <h3 className="font-semibold mb-2">Instant & Daily Production</h3>
           <ul className="text-sm space-y-2">
-            <li>Panel instantaneous (W): {results.panelInstantW.toFixed(1)} W</li>
-            <li>After derate: {results.panelAfterDerate.toFixed(1)} W</li>
-            <li>After MPPT: {results.panelAfterMppt.toFixed(1)} W</li>
-            <li>AC available per panel: {results.acAvailablePerPanel.toFixed(1)} W</li>
-            <li>Energy per panel / day: {results.energyPerPanelWhPerDay.toFixed(0)} Wh/day</li>
+            <li>**Total AC Available (Instant): {results.totalAcAvailableInstant.toFixed(0)} W**</li>
+            <li>**Total Energy Production (Daily): {results.totalEnergyWhPerDay.toFixed(0)} Wh/day**</li>
             <li>Load daily need: {results.loadDailyWh.toFixed(0)} Wh/day</li>
-            <li>Panels recommended for 24/7: {results.recommendedPanelCountFor24h}</li>
             <li>Required panel power for 24h: {results.requiredPanelPowerFor24h.toFixed(0)} W</li>
+            <li>Recommended panel count for 24/7: {results.recommendedPanelCountFor24h}</li>
           </ul>
         </div>
 
         <div className="p-4 border rounded-lg bg-white shadow-sm">
-          <h3 className="font-semibold mb-2">Battery & Safety</h3>
+          <h3 className="font-semibold mb-2">Battery, Current & Safety</h3>
           <ul className="text-sm space-y-2">
             <li>Battery total energy: {results.batteryTotalWh.toFixed(0)} Wh</li>
             <li>Battery usable energy: {results.batteryUsableWh.toFixed(0)} Wh</li>
@@ -336,11 +426,20 @@ export default function SolarSimulator() {
         <h3 className="font-semibold mb-2">Decision & Status</h3>
         <div className="space-y-2 text-sm">
           <p>
-            Continuous? —{' '}
+            Continuous Energy Status —{' '}
             <strong>
-              {results.canBeContinuousNow && results.inverterCanHandle
-                ? 'Yes (with recommended panel count)'
-                : 'No — adjust panels/battery/inverter or reduce load'}
+              {results.canBeContinuous
+                ? '✅ YES: Meets daily energy needs and inverter limits.'
+                : '❌ NO: Adjust inputs or reduce load.'}
+            </strong>
+          </p>
+          <p>
+            Instantaneous Power Match —{' '}
+            <strong>
+              {results.arraySufficientInstant
+                ? '✅ YES: Current sun/array power exceeds load (Instant: '
+                : '❌ NO: Current sun/array power is LESS than load (Instant: '}
+              {results.totalAcAvailableInstant.toFixed(0)} W vs Load: {inputs.loadWatts} W)
             </strong>
           </p>
 
@@ -365,10 +464,9 @@ export default function SolarSimulator() {
       <div className="mt-6 text-sm text-gray-700 p-4 border rounded bg-white shadow-sm">
         <h4 className="font-semibold mb-2">More features you can add</h4>
         <ul className="list-disc pl-5 space-y-1">
-          <li>Allow "panel count" input and compute aggregate production (currently shows per-panel numbers & recommended counts).</li>
+          <li>MPPT Sizing: Refine the MPPT current check to account for multiple panels in series or parallel strings.</li>
           <li>Hourly simulation (24-hour profile) to model charge/discharge across a day.</li>
           <li>Include temperature coefficient and shading effects for more accuracy.</li>
-          <li>Model MPPT charge limits when multiple panels are present (string vs parallel configurations).</li>
         </ul>
       </div>
     </div>

@@ -623,6 +623,16 @@ export default function SolarLandingPage() {
                       Try Consumption Calculator
                     </Button>
                   </Link>
+
+                  <Link href="/solar-sun-calculation">
+                    <Button
+                      size="lg"
+                      className="rounded-xl px-8 py-6 text-lg border-yellow-500 text-yellow-600 
+                                hover:bg-yellow-50 shadow-sm"
+                    >
+                      Try Solar Sun Calculator
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </CardContent>
