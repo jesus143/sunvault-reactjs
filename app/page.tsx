@@ -7,7 +7,7 @@ import { useUserActivityTracking } from "@/hooks/useUserActivityTracking";
 import Link from "next/link";
 
 export default function SolarLandingPage() {
-   useUserActivityTracking();
+  /*  useUserActivityTracking(); */
   return (
     <div className="w-full min-h-screen bg-white text-gray-800">
       {/* Hero Section */}
@@ -614,7 +614,7 @@ export default function SolarLandingPage() {
                   </Button>
 
                   {/* 💡 NEW: Link to Consumption Calculator */}
-                  <Link href="/calculator-consumption">
+                  <Link href="/solar-calculation">
                     <Button
                       size="lg"
                       className="rounded-xl px-8 py-6 text-lg border-yellow-500 text-yellow-600 
