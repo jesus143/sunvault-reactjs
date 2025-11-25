@@ -29,7 +29,7 @@ type Inputs = {
   safetyMargin: number; // fraction to increase needs
 };
 
-export default function SolarSunCalculator() {
+export default function SolarSimulator() {
   const [inputs, setInputs] = useState<Inputs>({
     sunPercent: 60,
     panelWatt: 400,
@@ -48,8 +48,9 @@ export default function SolarSunCalculator() {
     safetyMargin: 1.1,
   });
 
-  function update<K extends keyof Inputs>(key: K, value: Inputs[K]) {
-    setInputs((s) => ({ ...s, [key]: value }));
+  function update<K extends keyof Inputs>(key: K, raw: any) {
+    const value = raw === "" ? "" : Number(raw);
+    setInputs((s) => ({ ...s, [key]: value as any }));
   }
 
   // Derived/calculated results
@@ -170,7 +171,7 @@ export default function SolarSunCalculator() {
             min={0}
             max={100}
             value={inputs.sunPercent}
-            onChange={(e) => update("sunPercent", Number(e.target.value))}
+            onChange={(e) => update("sunPercent", e.target.value)}
             className="w-full"
           />
 
@@ -178,7 +179,7 @@ export default function SolarSunCalculator() {
           <input
             type="number"
             value={inputs.panelWatt}
-            onChange={(e) => update("panelWatt", Number(e.target.value))}
+            onChange={(e) => update("panelWatt", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
@@ -186,7 +187,7 @@ export default function SolarSunCalculator() {
           <input
             type="number"
             value={inputs.panelVolt}
-            onChange={(e) => update("panelVolt", Number(e.target.value))}
+            onChange={(e) => update("panelVolt", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
@@ -195,7 +196,7 @@ export default function SolarSunCalculator() {
             type="number"
             step="0.01"
             value={inputs.panelDerate}
-            onChange={(e) => update("panelDerate", Number(e.target.value))}
+            onChange={(e) => update("panelDerate", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
@@ -204,7 +205,7 @@ export default function SolarSunCalculator() {
             type="number"
             step="0.1"
             value={inputs.peakSunHours}
-            onChange={(e) => update("peakSunHours", Number(e.target.value))}
+            onChange={(e) => update("peakSunHours", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
@@ -212,7 +213,7 @@ export default function SolarSunCalculator() {
           <input
             type="number"
             value={inputs.mpptCurrentA}
-            onChange={(e) => update("mpptCurrentA", Number(e.target.value))}
+            onChange={(e) => update("mpptCurrentA", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
@@ -221,7 +222,7 @@ export default function SolarSunCalculator() {
             type="number"
             step="0.01"
             value={inputs.mpptEfficiency}
-            onChange={(e) => update("mpptEfficiency", Number(e.target.value))}
+            onChange={(e) => update("mpptEfficiency", e.target.value)}
             className="w-full p-2 border rounded"
           />
         </div>
@@ -234,7 +235,7 @@ export default function SolarSunCalculator() {
           <input
             type="number"
             value={inputs.batteryVolt}
-            onChange={(e) => update("batteryVolt", Number(e.target.value))}
+            onChange={(e) => update("batteryVolt", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
@@ -242,7 +243,7 @@ export default function SolarSunCalculator() {
           <input
             type="number"
             value={inputs.batteryAh}
-            onChange={(e) => update("batteryAh", Number(e.target.value))}
+            onChange={(e) => update("batteryAh", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
@@ -251,7 +252,7 @@ export default function SolarSunCalculator() {
             type="number"
             step="0.01"
             value={inputs.batteryEfficiency}
-            onChange={(e) => update("batteryEfficiency", Number(e.target.value))}
+            onChange={(e) => update("batteryEfficiency", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
@@ -260,7 +261,7 @@ export default function SolarSunCalculator() {
             type="number"
             step="0.01"
             value={inputs.batteryDoD}
-            onChange={(e) => update("batteryDoD", Number(e.target.value))}
+            onChange={(e) => update("batteryDoD", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
@@ -269,7 +270,7 @@ export default function SolarSunCalculator() {
             type="number"
             step="0.01"
             value={inputs.inverterEfficiency}
-            onChange={(e) => update("inverterEfficiency", Number(e.target.value))}
+            onChange={(e) => update("inverterEfficiency", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
@@ -277,7 +278,7 @@ export default function SolarSunCalculator() {
           <input
             type="number"
             value={inputs.inverterRatingW}
-            onChange={(e) => update("inverterRatingW", Number(e.target.value))}
+            onChange={(e) => update("inverterRatingW", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
@@ -285,7 +286,7 @@ export default function SolarSunCalculator() {
           <input
             type="number"
             value={inputs.loadWatts}
-            onChange={(e) => update("loadWatts", Number(e.target.value))}
+            onChange={(e) => update("loadWatts", e.target.value)}
             className="w-full p-2 border rounded"
           />
 
@@ -294,7 +295,7 @@ export default function SolarSunCalculator() {
             type="number"
             step="0.01"
             value={inputs.safetyMargin}
-            onChange={(e) => update("safetyMargin", Number(e.target.value))}
+            onChange={(e) => update("safetyMargin", e.target.value)}
             className="w-full p-2 border rounded"
           />
         </div>
